@@ -1,3 +1,7 @@
+#load the libraries to use cast and melt
+
+install.packages('reshape')
+install.packages('reshape2')
 library(reshape)
 library(reshape2)
 
