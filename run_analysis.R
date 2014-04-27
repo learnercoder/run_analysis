@@ -1,7 +1,3 @@
-#install packages for cast and melt function
-install.packages('reshape')
-install.packages('reshape2')
-
 #load the installed packages
 library(reshape)
 library(reshape2)
