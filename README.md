@@ -4,10 +4,11 @@ run_analysis
 Course Era assignment work
 ==================
 
-Assumptions:
+Pls Note:
 - Install 'reshape' and 'reshape2' packages 
 - The directory "UCI HAR Dataset" should be in the working directory of your R ( getwd() )
 - The script processes data for mean and std columns, meanFreq columns have also been ignored
+- The script has also been commented with each step explained correctly, please refer that in case of any confussion
 
 ========================
 
@@ -37,58 +38,4 @@ Explanation :
 - Write the tidy data  to a 'tidydata.txt' file in your working directory
 
 
-
-
-
-
-
-
-# Reading activity_labels.txt and naming them appropriately for activity data ('ydata')
-activitylabelpath <- 'UCI HAR Dataset\\activity_labels.txt'
-activitylabel <- read.table(activitylabelpath)
-colnames(activitylabel) <- c("activity_id","activity_name")
-colnames(ydata) <- "activity_id"
-ydata <- merge(ydata,activitylabel,by ='activity_id',sort=FALSE)  #keeping sort=FALSE to preserve the order
-
-#From all the measurements, getting only the mean and standard dev variables, meanFreq columns are ignored
-# reading the features.txt file
-ftrspath <- 'UCI HAR Dataset\\features.txt'
-ftrs <- read.table(ftrspath,stringsAsFactors=FALSE)
-ftrs <- read.table(ftrspath)
-ftrs <- t(ftrs[2])
-colnames(xdata)<- ftrs
-
-#subsetting the data by pattern matching on col names using grep function 
-subsetmean <- xdata[,grep("mean\\(\\)",colnames(xdata))]
-subsetstd <- xdata[,grep("std\\(\\)",colnames(xdata))]
-xdata<- cbind(subsetmean,subsetstd)
-
-#Column binding the X,Y and Subject data together to form the fina data
-data<-cbind(ydata,xdata)
-datafinal<-cbind(subdata,data)
-
-# Correct naming of columns
-test <- colnames(datafinal)
-test<- sub("tBodyAcc","Time Body Acceleration ",test[])
-test<- sub("tGravityAcc","Time Gravity Acceleration ",test[])
-test<- sub("tBodyGyro","Time Body Gyroscope ",test[])
-test<- sub("tGravityGyro","Time Gravity Gyroscope ",test[])
-test<- sub("fBodyAcc","Frequency Body Acceleration ",test[])
-test<- sub("fGravityAcc","Frequency Gravity Acceleration ",test[])
-test<- sub("fBodyGyro","Frequency Body Gyroscope ",test[])
-test<- sub("fGravityGyro","Frequency Gravity Gyroscope ",test[])
-test<- sub("fBodyBodyAcc","Frequency Body Body  Acceleration ",test[])
-test<- sub("fBodyBodyGyro","Frequency Body Body Gyroscope ",test[])
-test<- sub("-mean\\(\\)"," Mean ",test[])
-test<- sub("-std\\(\\)"," Standard Dev ",test[])
-test<- sub("-std"," Standard Dev ",test[])
-
-colnames(datafinal) <- test
-
-# Melting and Casting the data to get Mean for each parameter vs each comination of  Subject + Activity
-data2 <- melt(datafinal,id.vars =c("subject","activity_id","activity_name"))
-tidy <- cast(data2, subject+activity_id+activity_name ~variable,mean)
-
-#Writing down the final file - it gets saved in your working directory
-write.table(tidy, "tidydata.txt")
 
